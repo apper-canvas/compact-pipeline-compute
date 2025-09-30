@@ -17,31 +17,33 @@ const [formData, setFormData] = useState({
     source: "website"
   });
 
-  useEffect(() => {
-    if (lead) {
-      setFormData({
-firstName: lead.firstName || "",
-        lastName: lead.lastName || "",
-        email: lead.email || "",
-        phone: lead.phone || "",
-        company: lead.company || "",
-        productName: lead.productName || "",
-        rri: lead.rri || "",
-        status: lead.status || "new",
-        source: lead.source || "website"
-      });
-    } else {
-      setFormData({
-        firstName: "",
-lastName: "",
-        email: "",
-        phone: "",
-        company: "",
-        productName: "",
-        rri: "",
-        status: "new",
-        source: "website"
-      });
+useEffect(() => {
+    if (isOpen) {
+      if (lead) {
+        setFormData({
+          firstName: lead.firstName || "",
+          lastName: lead.lastName || "",
+          email: lead.email || "",
+          phone: lead.phone || "",
+          company: lead.company || "",
+          productName: lead.productName || "",
+          rri: lead.rri || "",
+          status: lead.status || "new",
+          source: lead.source || "website"
+        });
+      } else {
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          company: "",
+          productName: "",
+          rri: "",
+          status: "new",
+          source: "website"
+        });
+      }
     }
   }, [lead, isOpen]);
 
