@@ -16,7 +16,8 @@ const Deals = () => {
   const { toggleMobileSidebar } = useOutletContext();
   const [deals, setDeals] = useState([]);
   const [filteredDeals, setFilteredDeals] = useState([]);
-  const [leads, setLeads] = useState([]);
+const [leads, setLeads] = useState([]);
+  const [assigneeFilter, setAssigneeFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,7 +47,7 @@ const Deals = () => {
   }, []);
 
   // Filter deals based on search and filters
-  useEffect(() => {
+useEffect(() => {
     let filtered = deals;
 
     if (searchTerm) {
@@ -59,8 +60,12 @@ const Deals = () => {
       filtered = filtered.filter(deal => deal.stage === stageFilter);
     }
 
+    if (assigneeFilter !== "all") {
+      filtered = filtered.filter(deal => deal.assigneeId === parseInt(assigneeFilter));
+    }
+
     setFilteredDeals(filtered);
-  }, [deals, searchTerm, stageFilter]);
+  }, [deals, searchTerm, stageFilter, assigneeFilter]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -170,7 +175,7 @@ const Deals = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 items-center">
+<div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-slate-600">Stage:</label>
           <Select
@@ -184,6 +189,24 @@ const Deals = () => {
             <option value="negotiation">Negotiation</option>
             <option value="closed-won">Closed Won</option>
             <option value="closed-lost">Closed Lost</option>
+          </Select>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-slate-600">Assignee:</label>
+          <Select
+            value={assigneeFilter}
+            onChange={(e) => setAssigneeFilter(e.target.value)}
+            className="min-w-[140px]"
+          >
+            <option value="all">All Assignees</option>
+            {[...new Set(deals.filter(deal => deal.assigneeId && deal.assigneeName).map(deal => ({ id: deal.assigneeId, name: deal.assigneeName })))].reduce((unique, assignee) => {
+              if (!unique.find(u => u.id === assignee.id)) {
+                unique.push(assignee);
+              }
+              return unique;
+            }, []).map(assignee => (
+              <option key={assignee.id} value={assignee.id}>{assignee.name}</option>
+            ))}
           </Select>
         </div>
 
