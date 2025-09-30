@@ -91,7 +91,7 @@ const initializeBot = async () => {
     }
   };
 
-  const handleBotEvent = async (event) => {
+const handleBotEvent = async (event) => {
     try {
       switch (event.type) {
         case 'message':
@@ -106,6 +106,50 @@ const initializeBot = async () => {
             userId: event.userId,
             timestamp: new Date().toISOString()
           });
+
+          // Check if user message contains CRM queries
+          if (event.userId !== 'bot' && event.message) {
+            const messageText = event.message.text?.toLowerCase() || '';
+            const isCRMQuery = messageText.includes('lead') || 
+                              messageText.includes('follow up') || 
+                              messageText.includes('update') ||
+                              messageText.includes('deal') ||
+                              messageText.includes('activity');
+
+            if (isCRMQuery) {
+              try {
+                // Use Edge function to analyze and respond to query
+                const { ApperClient } = window.ApperSDK;
+                const apperClient = new ApperClient({
+                  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+                  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+                });
+
+                const result = await apperClient.functions.invoke(
+                  import.meta.env.VITE_ANALYZE_CONVERSATION,
+                  {
+                    body: JSON.stringify({
+                      conversationId: event.conversationId,
+                      userMessage: event.message.text,
+                      queryType: 'interactive',
+                      timestamp: new Date().toISOString()
+                    }),
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }
+                );
+
+                if (result.success === false) {
+                  console.info(`apper_info: An error was received in this function: ${import.meta.env.VITE_ANALYZE_CONVERSATION}. The response body is: ${JSON.stringify(result)}.`);
+                }
+
+                // Response will be handled by Botpress bot's reply mechanism
+              } catch (error) {
+                console.info(`apper_info: An error was received in this function: ${import.meta.env.VITE_ANALYZE_CONVERSATION}. The error is: ${error.message}`);
+              }
+            }
+          }
           break;
 
         case 'conversation.started':
@@ -135,7 +179,7 @@ const initializeBot = async () => {
     }
   };
 
-  const handleConversationEnd = async (conversationId) => {
+const handleConversationEnd = async (conversationId) => {
     try {
       // Get conversation summary
       const conversation = await conversationService.getConversation(conversationId);
@@ -153,7 +197,8 @@ const initializeBot = async () => {
           {
             body: JSON.stringify({
               conversationId: conversationId,
-              messages: conversation.messages
+              messages: conversation.messages,
+              queryType: 'summary'
             }),
             headers: {
               'Content-Type': 'application/json'
@@ -161,12 +206,14 @@ const initializeBot = async () => {
           }
         );
 
-        if (result.success && result.data.leadCreated) {
+        if (result.success === false) {
+          console.info(`apper_info: An error was received in this function: ${import.meta.env.VITE_ANALYZE_CONVERSATION}. The response body is: ${JSON.stringify(result)}.`);
+        } else if (result.success && result.data?.leadCreated) {
           toast.success(`New lead created: ${result.data.leadName}`);
         }
       }
     } catch (error) {
-      console.info(`apper_info: An error was received in conversation analysis. The error is: ${error.message}`);
+      console.info(`apper_info: An error was received in this function: ${import.meta.env.VITE_ANALYZE_CONVERSATION}. The error is: ${error.message}`);
     }
   };
 
