@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 1,
+    "leadId": 1,
+    "title": "Enterprise Software License - TechCorp",
+    "value": 45000,
+    "stage": "negotiation",
+    "probability": 75,
+    "expectedClose": "2024-02-15T00:00:00Z",
+    "createdAt": "2024-01-18T14:20:00Z"
+  },
+  {
+    "Id": 2,
+    "leadId": 3,
+    "title": "Startup Growth Package - Growth Startup",
+    "value": 12500,
+    "stage": "proposal",
+    "probability": 60,
+    "expectedClose": "2024-02-28T00:00:00Z",
+    "createdAt": "2024-01-22T09:30:00Z"
+  },
+  {
+    "Id": 3,
+    "leadId": 4,
+    "title": "Enterprise Integration - Enterprise Systems",
+    "value": 78000,
+    "stage": "negotiation",
+    "probability": 80,
+    "expectedClose": "2024-02-10T00:00:00Z",
+    "createdAt": "2024-01-19T15:45:00Z"
+  },
+  {
+    "Id": 4,
+    "leadId": 7,
+    "title": "Retail Solution - RetailCo",
+    "value": 32000,
+    "stage": "proposal",
+    "probability": 45,
+    "expectedClose": "2024-03-05T00:00:00Z",
+    "createdAt": "2024-01-21T10:15:00Z"
+  },
+  {
+    "Id": 5,
+    "leadId": 8,
+    "title": "Manufacturing Suite - Manufacturing Plus",
+    "value": 56000,
+    "stage": "prospecting",
+    "probability": 25,
+    "expectedClose": "2024-03-20T00:00:00Z",
+    "createdAt": "2024-01-20T16:30:00Z"
+  },
+  {
+    "Id": 6,
+    "leadId": null,
+    "title": "Healthcare Platform - MedTech Corp",
+    "value": 92000,
+    "stage": "closed-won",
+    "probability": 100,
+    "expectedClose": "2024-01-15T00:00:00Z",
+    "createdAt": "2024-01-02T10:00:00Z"
+  },
+  {
+    "Id": 7,
+    "leadId": null,
+    "title": "Education Portal - EduTech Inc",
+    "value": 28000,
+    "stage": "closed-lost",
+    "probability": 0,
+    "expectedClose": "2024-01-20T00:00:00Z",
+    "createdAt": "2024-01-05T14:30:00Z"
+  }
+]

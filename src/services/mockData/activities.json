@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "leadId": 1,
+    "dealId": 1,
+    "type": "call",
+    "subject": "Discovery call with Sarah Johnson",
+    "notes": "Discussed their current tech stack and pain points. They're interested in our enterprise solution. Need to send proposal by Friday.",
+    "dueDate": "2024-01-25T10:00:00Z",
+    "completed": true,
+    "createdAt": "2024-01-18T14:20:00Z"
+  },
+  {
+    "Id": 2,
+    "leadId": 2,
+    "dealId": null,
+    "type": "email",
+    "subject": "Follow up on initial inquiry",
+    "notes": "Send introduction email and company overview. Include case studies from similar digital agencies.",
+    "dueDate": "2024-01-26T09:00:00Z",
+    "completed": false,
+    "createdAt": "2024-01-20T10:15:00Z"
+  },
+  {
+    "Id": 3,
+    "leadId": 3,
+    "dealId": 2,
+    "type": "meeting",
+    "subject": "Product demo for Growth Startup Co",
+    "notes": "Schedule 30-minute demo focusing on scalability features. Include pricing discussion.",
+    "dueDate": "2024-01-27T14:00:00Z",
+    "completed": false,
+    "createdAt": "2024-01-22T09:30:00Z"
+  },
+  {
+    "Id": 4,
+    "leadId": 4,
+    "dealId": 3,
+    "type": "call",
+    "subject": "Contract negotiation call",
+    "notes": "Review contract terms and discuss implementation timeline. Need to address their security requirements.",
+    "dueDate": "2024-01-24T15:30:00Z",
+    "completed": false,
+    "createdAt": "2024-01-19T15:45:00Z"
+  },
+  {
+    "Id": 5,
+    "leadId": 5,
+    "dealId": null,
+    "type": "task",
+    "subject": "Research FinTech Innovations background",
+    "notes": "Look up company info, recent funding, current solutions. Prepare personalized approach for first contact.",
+    "dueDate": "2024-01-25T11:00:00Z",
+    "completed": false,
+    "createdAt": "2024-01-22T13:10:00Z"
+  },
+  {
+    "Id": 6,
+    "leadId": 7,
+    "dealId": 4,
+    "type": "email",
+    "subject": "Send proposal to RetailCo",
+    "notes": "Customize proposal for retail industry. Include ROI calculator and implementation timeline.",
+    "dueDate": "2024-01-26T16:00:00Z",
+    "completed": false,
+    "createdAt": "2024-01-21T10:15:00Z"
+  },
+  {
+    "Id": 7,
+    "leadId": 8,
+    "dealId": 5,
+    "type": "meeting",
+    "subject": "Technical requirements review",
+    "notes": "Meet with their IT team to discuss integration requirements and technical specifications.",
+    "dueDate": "2024-01-28T13:00:00Z",
+    "completed": false,
+    "createdAt": "2024-01-20T16:30:00Z"
+  },
+  {
+    "Id": 8,
+    "leadId": 1,
+    "dealId": 1,
+    "type": "note",
+    "subject": "Follow up on proposal feedback",
+    "notes": "Sarah mentioned they need board approval. Check in next week for updates on decision timeline.",
+    "dueDate": "2024-01-30T12:00:00Z",
+    "completed": false,
+    "createdAt": "2024-01-23T08:00:00Z"
+  }
+]

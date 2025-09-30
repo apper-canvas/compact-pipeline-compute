@@ -1,0 +1,98 @@
+[
+  {
+    "Id": 1,
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "email": "sarah.johnson@techcorp.com",
+    "phone": "(555) 123-4567",
+    "company": "TechCorp Solutions",
+    "status": "qualified",
+    "source": "website",
+    "createdAt": "2024-01-15T08:30:00Z",
+    "lastContact": "2024-01-18T14:20:00Z"
+  },
+  {
+    "Id": 2,
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "email": "m.chen@innovate.io",
+    "phone": "(555) 234-5678",
+    "company": "Innovate Digital",
+    "status": "new",
+    "source": "referral",
+    "createdAt": "2024-01-20T10:15:00Z",
+    "lastContact": null
+  },
+  {
+    "Id": 3,
+    "firstName": "Emily",
+    "lastName": "Rodriguez",
+    "email": "emily.r@startup.co",
+    "phone": "(555) 345-6789",
+    "company": "Growth Startup Co",
+    "status": "contacted",
+    "source": "email",
+    "createdAt": "2024-01-10T16:45:00Z",
+    "lastContact": "2024-01-22T09:30:00Z"
+  },
+  {
+    "Id": 4,
+    "firstName": "David",
+    "lastName": "Thompson",
+    "email": "d.thompson@enterprise.com",
+    "phone": "(555) 456-7890",
+    "company": "Enterprise Systems",
+    "status": "qualified",
+    "source": "social",
+    "createdAt": "2024-01-12T11:20:00Z",
+    "lastContact": "2024-01-19T15:45:00Z"
+  },
+  {
+    "Id": 5,
+    "firstName": "Lisa",
+    "lastName": "Wang",
+    "email": "lisa.wang@fintech.com",
+    "phone": "(555) 567-8901",
+    "company": "FinTech Innovations",
+    "status": "new",
+    "source": "website",
+    "createdAt": "2024-01-22T13:10:00Z",
+    "lastContact": null
+  },
+  {
+    "Id": 6,
+    "firstName": "James",
+    "lastName": "Miller",
+    "email": "james.miller@consulting.com",
+    "phone": "(555) 678-9012",
+    "company": "Strategic Consulting",
+    "status": "lost",
+    "source": "phone",
+    "createdAt": "2024-01-08T09:00:00Z",
+    "lastContact": "2024-01-16T12:00:00Z"
+  },
+  {
+    "Id": 7,
+    "firstName": "Anna",
+    "lastName": "Garcia",
+    "email": "anna.garcia@retailco.com",
+    "phone": "(555) 789-0123",
+    "company": "RetailCo Inc",
+    "status": "contacted",
+    "source": "referral",
+    "createdAt": "2024-01-14T14:30:00Z",
+    "lastContact": "2024-01-21T10:15:00Z"
+  },
+  {
+    "Id": 8,
+    "firstName": "Robert",
+    "lastName": "Lee",
+    "email": "robert.lee@manufacturing.com",
+    "phone": "(555) 890-1234",
+    "company": "Manufacturing Plus",
+    "status": "qualified",
+    "source": "website",
+    "createdAt": "2024-01-17T12:45:00Z",
+    "lastContact": "2024-01-20T16:30:00Z"
+  }
+]
