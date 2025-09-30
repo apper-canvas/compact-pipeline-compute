@@ -10,26 +10,55 @@ function BotpressChat() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [botLoaded, setBotLoaded] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
     // Initialize Botpress Web Chat when component mounts
     if (window.botpressWebChat) {
       initializeBot();
     } else {
       // Wait for Botpress script to load
+      let attempts = 0;
+      const maxAttempts = 100; // 10 seconds with 100ms intervals
+      
       const checkBotpress = setInterval(() => {
+        attempts++;
         if (window.botpressWebChat) {
           clearInterval(checkBotpress);
           initializeBot();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkBotpress);
+          console.warn("Botpress chat failed to load after 10 seconds");
+          toast.error("Chat assistant failed to load. Please refresh the page.");
         }
       }, 100);
 
-      // Clean up interval after 10 seconds
-      setTimeout(() => clearInterval(checkBotpress), 10000);
+      // Cleanup function
+      return () => clearInterval(checkBotpress);
     }
   }, []);
 
-  const initializeBot = async () => {
+const initializeBot = async () => {
     try {
+      // Validate Botpress environment configuration
+      const requiredEnvVars = [
+        'VITE_BOTPRESS_BOT_ID',
+        'VITE_BOTPRESS_HOST_URL',
+        'VITE_BOTPRESS_MESSAGING_URL',
+        'VITE_BOTPRESS_CLIENT_ID'
+      ];
+      
+      const missingVars = requiredEnvVars.filter(varName => !import.meta.env[varName]);
+      
+      if (missingVars.length > 0) {
+        console.warn("Missing Botpress environment variables:", missingVars);
+        toast.error("Chat assistant configuration incomplete");
+        return;
+      }
+
+      // Verify Botpress API methods exist
+      if (!window.botpressWebChat || typeof window.botpressWebChat.init !== 'function') {
+        throw new Error("Botpress WebChat API is not properly loaded");
+      }
+
       await window.botpressWebChat.init({
         botId: import.meta.env.VITE_BOTPRESS_BOT_ID,
         hostUrl: import.meta.env.VITE_BOTPRESS_HOST_URL,
@@ -45,15 +74,20 @@ function BotpressChat() {
 
       setBotLoaded(true);
 
-      // Listen for bot events
-      window.botpressWebChat.onEvent((event) => {
-        handleBotEvent(event);
-      });
+      // Listen for bot events if onEvent method exists
+      if (typeof window.botpressWebChat.onEvent === 'function') {
+        window.botpressWebChat.onEvent((event) => {
+          handleBotEvent(event);
+        });
+      } else {
+        console.warn("Botpress onEvent method not available");
+      }
 
       toast.success("Chat assistant is ready!");
     } catch (error) {
       console.error("Failed to initialize Botpress:", error);
-      toast.error("Failed to load chat assistant");
+      toast.error("Failed to load chat assistant. Please check your configuration.");
+      setBotLoaded(false);
     }
   };
 
@@ -136,16 +170,38 @@ function BotpressChat() {
     }
   };
 
-  const toggleChat = () => {
+const toggleChat = () => {
     if (!botLoaded) {
       toast.error("Chat assistant is still loading...");
       return;
     }
 
-    if (isOpen) {
-      window.botpressWebChat.hide();
-    } else {
-      window.botpressWebChat.show();
+    // Verify Botpress API is available and has required methods
+    if (!window.botpressWebChat) {
+      toast.error("Chat assistant is not available");
+      console.error("Botpress WebChat is not loaded");
+      return;
+    }
+
+    try {
+      if (isOpen) {
+        if (typeof window.botpressWebChat.hide === 'function') {
+          window.botpressWebChat.hide();
+        } else {
+          console.warn("Botpress hide method not available");
+          setIsOpen(false); // Fallback to manual state management
+        }
+      } else {
+        if (typeof window.botpressWebChat.show === 'function') {
+          window.botpressWebChat.show();
+        } else {
+          console.warn("Botpress show method not available");
+          setIsOpen(true); // Fallback to manual state management
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling chat:", error);
+      toast.error("Failed to toggle chat assistant");
     }
   };
 
