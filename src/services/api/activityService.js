@@ -55,12 +55,31 @@ export const activityService = {
     return { ...deleted };
   },
 
-  async markComplete(id) {
+async markComplete(id) {
     await delay(200);
     const index = activities.findIndex(a => a.Id === parseInt(id));
     if (index === -1) throw new Error("Activity not found");
     
+    const activity = activities[index];
     activities[index].completed = true;
+    
+    // If this is a Phone Call activity with notes, trigger Edge function for follow-up creation
+    if (activity.type === 'Phone Call' && activity.description && activity.description.trim()) {
+      try {
+        // This will be handled by the frontend to call the Edge function
+        // We return the activity with a flag to trigger the Edge function
+        return { 
+          ...activities[index], 
+          triggerFollowUp: true,
+          notes: activity.description,
+          dealId: activity.dealId || 1 // Default to deal ID 1 if not specified
+        };
+      } catch (error) {
+        // Don't fail the completion if Edge function fails
+        console.warn('Follow-up creation failed:', error);
+      }
+    }
+    
     return { ...activities[index] };
   }
 };

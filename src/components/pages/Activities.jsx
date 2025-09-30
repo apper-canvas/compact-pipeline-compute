@@ -13,6 +13,13 @@ import { leadService } from "@/services/api/leadService";
 import { dealService } from "@/services/api/dealService";
 import { toast } from "react-toastify";
 
+// Initialize ApperClient for Edge function calls
+const { ApperClient } = window.ApperSDK;
+const apperClient = new ApperClient({
+  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+});
+
 const Activities = () => {
   const { toggleMobileSidebar } = useOutletContext();
   const [activities, setActivities] = useState([]);
@@ -122,9 +129,40 @@ const Activities = () => {
     }
   };
 
-  const handleMarkComplete = async (id) => {
+const handleMarkComplete = async (id) => {
     try {
-      await activityService.markComplete(id);
+      const result = await activityService.markComplete(id);
+      
+      // If this was a Phone Call activity with notes, call Edge function for follow-up creation
+      if (result.triggerFollowUp && result.notes && result.dealId) {
+        try {
+          const edgeResult = await apperClient.functions.invoke(import.meta.env.VITE_PROCESS_CALL_COMPLETION, {
+            body: JSON.stringify({
+              activityId: result.Id,
+              notes: result.notes,
+              dealId: result.dealId
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (edgeResult.success) {
+            toast.success(`Activity marked complete. ${edgeResult.data.message}`);
+          } else {
+            console.info(`apper_info: An error was received in this function: ${import.meta.env.VITE_PROCESS_CALL_COMPLETION}. The response body is: ${JSON.stringify(edgeResult)}.`);
+            toast.success("Activity marked as complete");
+            toast.warning("Follow-up creation failed - please create manually if needed");
+          }
+        } catch (edgeError) {
+          console.info(`apper_info: An error was received in this function: ${import.meta.env.VITE_PROCESS_CALL_COMPLETION}. The error is: ${edgeError.message}`);
+          toast.success("Activity marked as complete");
+          toast.warning("Follow-up creation failed - please create manually if needed");
+        }
+      } else {
+        toast.success("Activity marked as complete");
+      }
+      
       loadData();
     } catch (err) {
       toast.error(err.message || "Failed to mark activity as complete");
