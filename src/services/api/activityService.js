@@ -3,6 +3,7 @@ import mockActivities from "@/services/mockData/activities.json";
 let activities = [...mockActivities];
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const activityService = {
   async getAll() {
     await delay(300);
@@ -15,7 +16,8 @@ export const activityService = {
     if (!activity) throw new Error("Activity not found");
     return { ...activity };
   },
-async create(activityData) {
+
+  async create(activityData) {
     await delay(400);
     const newActivity = {
       ...activityData,
@@ -23,40 +25,13 @@ async create(activityData) {
       leadId: activityData.leadId ? parseInt(activityData.leadId) : null,
       dealId: activityData.dealId ? parseInt(activityData.dealId) : null,
       createdAt: new Date().toISOString(),
-      completed: false,
-      conversationId: activityData.conversationId || null,
-      botGenerated: activityData.botGenerated || false
+      completed: false
     };
     activities.push(newActivity);
     return { ...newActivity };
   },
 
-  async createFromBotInteraction(interactionData) {
-    await delay(300);
-    const { conversationId, leadId, dealId, summary, activityType } = interactionData;
-    
-    const newActivity = {
-      subject: `Bot Interaction - ${activityType || 'Chat'}`,
-      type: 'Bot Interaction',
-      status: 'Completed',
-      priority: 'Medium',
-      dueDate: new Date().toISOString().split('T')[0],
-      description: summary || 'Automated activity from bot conversation',
-      leadId: leadId ? parseInt(leadId) : null,
-      dealId: dealId ? parseInt(dealId) : null,
-      conversationId: conversationId,
-      botGenerated: true,
-      createdBy: 'Bot Assistant',
-      Id: Math.max(...activities.map(a => a.Id)) + 1,
-      createdAt: new Date().toISOString(),
-      completed: true
-    };
-    
-    activities.push(newActivity);
-    return { ...newActivity };
-  },
-
-async update(id, activityData) {
+  async update(id, activityData) {
     await delay(350);
     const index = activities.findIndex(a => a.Id === parseInt(id));
     if (index === -1) throw new Error("Activity not found");
@@ -69,16 +44,6 @@ async update(id, activityData) {
       dealId: activityData.dealId ? parseInt(activityData.dealId) : null
     };
     return { ...activities[index] };
-  },
-
-  async getActivitiesByConversation(conversationId) {
-    await delay(200);
-    return activities.filter(a => a.conversationId === conversationId).map(a => ({ ...a }));
-  },
-
-  async getBotGeneratedActivities() {
-    await delay(200);
-    return activities.filter(a => a.botGenerated === true).map(a => ({ ...a }));
   },
 
   async delete(id) {
@@ -113,15 +78,6 @@ async markComplete(id) {
         // Don't fail the completion if Edge function fails
         console.warn('Follow-up creation failed:', error);
       }
-    }
-    
-    // If this is a bot-generated activity, check for additional follow-up
-    if (activity.botGenerated && activity.conversationId) {
-      return {
-        ...activities[index],
-        triggerBotAnalysis: true,
-        conversationId: activity.conversationId
-      };
     }
     
     return { ...activities[index] };

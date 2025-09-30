@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "@/components/organisms/Sidebar";
 import MobileSidebar from "@/components/organisms/MobileSidebar";
-import BotpressChat from "@/components/organisms/BotpressChat";
+
 const Layout = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -33,7 +33,6 @@ const Layout = () => {
           </div>
         </div>
       </div>
-<BotpressChat />
     </div>
   );
 };
