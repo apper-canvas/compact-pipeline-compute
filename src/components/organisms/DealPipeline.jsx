@@ -105,7 +105,13 @@ const DealPipeline = ({ deals, onMoveStage, onEdit, onDelete }) => {
                     {/* Expected Close */}
                     <div className="text-xs text-slate-500">
                       Expected: {format(new Date(deal.expectedClose), "MMM d")}
-                    </div>
+</div>
+                    {deal.assigneeName && (
+                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
+                        <ApperIcon name="User" size={12} />
+                        <span>{deal.assigneeName}</span>
+                      </div>
+                    )}
 
                     {/* Stage Movement */}
                     {stage.id !== "closed-won" && stage.id !== "closed-lost" && (

@@ -5,36 +5,42 @@ import ApperIcon from "@/components/ApperIcon";
 import { format } from "date-fns";
 
 const DealModal = ({ isOpen, onClose, onSave, deal = null, leads = [] }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     leadId: "",
     title: "",
     value: "",
     stage: "prospecting",
     probability: "50",
-    expectedClose: ""
+    expectedClose: "",
+    assigneeId: "",
+    assigneeName: ""
   });
 
   useEffect(() => {
     if (deal) {
-      setFormData({
+setFormData({
         leadId: deal.leadId?.toString() || "",
         title: deal.title || "",
         value: deal.value?.toString() || "",
         stage: deal.stage || "prospecting",
         probability: deal.probability?.toString() || "50",
-        expectedClose: deal.expectedClose ? format(new Date(deal.expectedClose), "yyyy-MM-dd") : ""
+        expectedClose: deal.expectedClose ? format(new Date(deal.expectedClose), "yyyy-MM-dd") : "",
+        assigneeId: deal.assigneeId?.toString() || "",
+        assigneeName: deal.assigneeName || ""
       });
     } else {
       const nextMonth = new Date();
       nextMonth.setMonth(nextMonth.getMonth() + 1);
 
-      setFormData({
+setFormData({
         leadId: "",
         title: "",
         value: "",
         stage: "prospecting",
         probability: "50",
-        expectedClose: format(nextMonth, "yyyy-MM-dd")
+        expectedClose: format(nextMonth, "yyyy-MM-dd"),
+        assigneeId: "",
+        assigneeName: ""
       });
     }
   }, [deal, isOpen]);
@@ -47,10 +53,18 @@ const DealModal = ({ isOpen, onClose, onSave, deal = null, leads = [] }) => {
     { value: "closed-lost", label: "Closed Lost" }
   ];
 
-  const leadOptions = leads.map(lead => ({
+const leadOptions = leads.map(lead => ({
     value: lead.Id.toString(),
     label: `${lead.firstName} ${lead.lastName} - ${lead.company}`
   }));
+
+  const assigneeOptions = [
+    { value: "1", label: "Sarah Johnson" },
+    { value: "2", label: "Mike Chen" },
+    { value: "3", label: "Emily Davis" },
+    { value: "4", label: "David Wilson" },
+    { value: "5", label: "Lisa Thompson" }
+  ];
 
   const handleChange = (e) => {
     setFormData({
@@ -149,7 +163,23 @@ const DealModal = ({ isOpen, onClose, onSave, deal = null, leads = [] }) => {
               name="leadId"
               value={formData.leadId}
               onChange={handleChange}
-              options={leadOptions}
+options={leadOptions}
+            />
+
+            <FormField
+              label="Assignee"
+              name="assigneeId"
+              type="select"
+              value={formData.assigneeId}
+              onChange={(e) => {
+                const selectedOption = assigneeOptions.find(opt => opt.value === e.target.value);
+                setFormData({
+                  ...formData,
+                  assigneeId: e.target.value,
+                  assigneeName: selectedOption?.label || ""
+                });
+              }}
+              options={assigneeOptions}
             />
 
             {/* Actions */}

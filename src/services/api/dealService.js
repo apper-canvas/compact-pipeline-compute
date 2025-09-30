@@ -20,9 +20,10 @@ export const dealService = {
   async create(dealData) {
     await delay(400);
     const newDeal = {
-      ...dealData,
+...dealData,
       Id: Math.max(...deals.map(d => d.Id)) + 1,
       leadId: dealData.leadId ? parseInt(dealData.leadId) : null,
+      assigneeId: dealData.assigneeId ? parseInt(dealData.assigneeId) : null,
       createdAt: new Date().toISOString()
     };
     deals.push(newDeal);
@@ -37,8 +38,9 @@ export const dealService = {
     deals[index] = {
       ...deals[index],
       ...dealData,
-      Id: parseInt(id),
-      leadId: dealData.leadId ? parseInt(dealData.leadId) : null
+Id: parseInt(id),
+      leadId: dealData.leadId ? parseInt(dealData.leadId) : null,
+      assigneeId: dealData.assigneeId ? parseInt(dealData.assigneeId) : null
     };
     return { ...deals[index] };
   },
