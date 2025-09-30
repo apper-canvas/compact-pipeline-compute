@@ -76,8 +76,24 @@ const LeadCard = ({ lead, onUpdateStatus, onEdit, onDelete }) => {
                 {lead.status}
               </Badge>
             </div>
-            <p className="text-slate-600 font-medium">{lead.company}</p>
+<p className="text-slate-600 font-medium">{lead.company}</p>
           </div>
+          {lead.productName && (
+            <div className="flex items-center gap-2">
+              <ApperIcon name="Building" size={16} className="text-slate-400" />
+              <p className="text-slate-600 text-sm">
+                <span className="font-medium">Product:</span> {lead.productName}
+              </p>
+            </div>
+          )}
+          {lead.rri && (
+            <div className="flex items-center gap-2">
+              <ApperIcon name="TrendingUp" size={16} className="text-slate-400" />
+              <p className="text-slate-600 text-sm">
+                <span className="font-medium">RRI:</span> {lead.rri}
+              </p>
+            </div>
+          )}
           
           <div className="flex items-center gap-1">
             <Button
@@ -111,7 +127,7 @@ const LeadCard = ({ lead, onUpdateStatus, onEdit, onDelete }) => {
           <div className="flex items-center gap-2">
             <ApperIcon name={getSourceIcon(lead.source)} className="h-4 w-4 text-slate-400" />
             <span className="text-sm text-slate-600">Source: {lead.source}</span>
-          </div>
+</div>
         </div>
 
         {/* Dates */}

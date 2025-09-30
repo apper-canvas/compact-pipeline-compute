@@ -46,10 +46,11 @@ const Leads = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(lead =>
-        lead.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+lead.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lead.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.company.toLowerCase().includes(searchTerm.toLowerCase())
+        lead.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (lead.productName && lead.productName.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 

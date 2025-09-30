@@ -17,13 +17,15 @@ export const leadService = {
     return { ...lead };
   },
 
-  async create(leadData) {
+async create(leadData) {
     await delay(400);
     const newLead = {
       ...leadData,
       Id: Math.max(...leads.map(l => l.Id)) + 1,
       createdAt: new Date().toISOString(),
-      lastContact: null
+      lastContact: null,
+      productName: leadData.productName || "",
+      rri: leadData.rri || ""
     };
     leads.push(newLead);
     return { ...newLead };
