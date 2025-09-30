@@ -9,8 +9,8 @@ import Empty from "@/components/ui/Empty";
 import Button from "@/components/atoms/Button";
 import Select from "@/components/atoms/Select";
 import { leadService } from "@/services/api/leadService";
+import { conversationService } from "@/services/api/conversationService";
 import { toast } from "react-toastify";
-
 const Leads = () => {
   const { toggleMobileSidebar } = useOutletContext();
   const [leads, setLeads] = useState([]);
@@ -115,15 +115,20 @@ const Leads = () => {
     }
   };
 
-  const headerActions = [
+const headerActions = [
     {
       label: "Add Lead",
       icon: "Plus",
       onClick: handleAddLead,
       variant: "primary"
+    },
+    {
+      label: "Chat History",
+      icon: "MessageCircle",
+      onClick: () => toast.info("View chat conversations in lead details"),
+      variant: "secondary"
     }
   ];
-
   if (loading) return <Loading type="cards" />;
   if (error) return <Error message={error} onRetry={loadLeads} />;
 
@@ -202,11 +207,12 @@ const Leads = () => {
       )}
 
       {/* Lead Modal */}
-      <LeadModal
+<LeadModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveLead}
         lead={editingLead}
+        showConversationHistory={true}
       />
     </div>
   );

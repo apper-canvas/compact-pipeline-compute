@@ -11,6 +11,7 @@ import Select from "@/components/atoms/Select";
 import { activityService } from "@/services/api/activityService";
 import { leadService } from "@/services/api/leadService";
 import { dealService } from "@/services/api/dealService";
+import { conversationService } from "@/services/api/conversationService";
 import { toast } from "react-toastify";
 
 // Initialize ApperClient for Edge function calls
@@ -19,7 +20,6 @@ const apperClient = new ApperClient({
   apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
   apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
 });
-
 const Activities = () => {
   const { toggleMobileSidebar } = useOutletContext();
   const [activities, setActivities] = useState([]);
@@ -168,13 +168,21 @@ const handleMarkComplete = async (id) => {
       toast.error(err.message || "Failed to mark activity as complete");
     }
   };
-
-  const headerActions = [
+const headerActions = [
     {
       label: "Add Activity",
       icon: "Plus",
       onClick: handleAddActivity,
       variant: "primary"
+    },
+    {
+      label: "Bot Activities",
+      icon: "Bot",
+      onClick: () => {
+        const botActivities = activities.filter(a => a.createdBy?.includes('Bot'));
+        toast.info(`Found ${botActivities.length} bot-generated activities`);
+      },
+      variant: "secondary"
     }
   ];
 
@@ -249,13 +257,14 @@ const handleMarkComplete = async (id) => {
       )}
 
       {/* Activity Modal */}
-      <ActivityModal
+<ActivityModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveActivity}
         activity={editingActivity}
         leads={leads}
         deals={deals}
+        showBotIntegration={true}
       />
     </div>
   );
